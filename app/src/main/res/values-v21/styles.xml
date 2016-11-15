@@ -1,10 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="AppTheme" parent="android:Theme.Material">
-        <item name="android:colorPrimary">#2ecc71</item>
-        <item name="android:colorPrimaryDark">#27ae60</item>
+        <item name="android:colorPrimary">#00BCD4</item>
+        <item name="android:colorPrimaryDark">#0097A7</item>
     </style>
-    <style name="AppTheme.LoginActivity" parent="android:Theme.Material.NoActionBar">
-
+    <style name="LoginActivity" parent="android:Theme.Material.NoActionBar">
+        <item name="android:colorPrimary">#00BCD4</item>
+        <item name="android:colorPrimaryDark">#0097A7</item>
+        <item name="android:colorBackground">@color/login_background</item>
+        <item name="android:background">@color/login_background</item>
+        <item name="android:windowBackground">@color/login_background</item>
+        <item name="android:colorAccent">#FFFFFF</item>
+        <item name="android:statusBarColor">@color/login_background</item>
     </style>
 </resources>

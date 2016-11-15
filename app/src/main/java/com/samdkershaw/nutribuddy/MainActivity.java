@@ -1,16 +1,32 @@
 package com.samdkershaw.nutribuddy;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 public class MainActivity extends Activity {
+
+    GoogleAcctHolder acctInfo = GoogleAcctHolder.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        TextView tv1 = (TextView)findViewById(R.id.text_name);
+        tv1.setText(acctInfo.getGoogleEmail());
+    }
+
+    public void openLoginActivity(View view) {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override
