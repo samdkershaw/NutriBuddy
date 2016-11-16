@@ -1,57 +1,60 @@
 package com.samdkershaw.nutribuddy;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.api.Status;
 
-public class LoginActivity extends FragmentActivity implements
-        GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
+import java.util.concurrent.TimeUnit;
+
+/**
+ * Activity to demonstrate basic retrieval of the Google user's ID, email address, and basic
+ * profile.
+ */
+public class LoginActivity extends AppCompatActivity implements
+        GoogleApiClient.OnConnectionFailedListener,
+        View.OnClickListener {
 
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
 
     private GoogleApiClient mGoogleApiClient;
+    private TextView mStatusTextView;
     private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
+
+        getSupportActionBar().hide();
 
         // Views
-        //mStatusTextView = (TextView) findViewById(R.id.status);
+        mStatusTextView = (TextView) findViewById(R.id.status);
 
+        Log.d(TAG, "Reached this point...");
         // Button listeners
-        SignInButton mSignInButton = (SignInButton)findViewById(R.id.google_sign_in_button);
-        //findViewById(R.id.sign_out_button).setOnClickListener(this);
-        //findViewById(R.id.disconnect_button).setOnClickListener(this);
+        findViewById(R.id.sign_in_button).setOnClickListener(this);
 
         // [START configure_signin]
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
-                .requestScopes(
-                        new Scope(Scopes.FITNESS_ACTIVITY_READ),
-                        new Scope(Scopes.FITNESS_NUTRITION_READ_WRITE))
                 .build();
         // [END configure_signin]
 
@@ -72,13 +75,9 @@ public class LoginActivity extends FragmentActivity implements
         // may be displayed when only basic profile is requested. Try adding the
         // Scopes.PLUS_LOGIN scope to the GoogleSignInOptions to see the
         // difference.
-        try {
-            mSignInButton.setOnClickListener(this);
-            mSignInButton.setSize(SignInButton.SIZE_WIDE);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        //mSignInButton.setScopes(gso.getScopeArray());
+        SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_button);
+        signInButton.setSize(SignInButton.SIZE_STANDARD);
+        signInButton.setScopes(gso.getScopeArray());
         // [END customize_button]
     }
 
@@ -101,6 +100,7 @@ public class LoginActivity extends FragmentActivity implements
             opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
                 @Override
                 public void onResult(GoogleSignInResult googleSignInResult) {
+                    try { TimeUnit.MILLISECONDS.sleep(1000); } catch (InterruptedException e) { e.printStackTrace(); }
                     hideProgressDialog();
                     handleSignInResult(googleSignInResult);
                 }
@@ -127,16 +127,16 @@ public class LoginActivity extends FragmentActivity implements
         if (result.isSuccess()) {
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
-            GoogleAcctHolder acctInfo = GoogleAcctHolder.getInstance();
-            acctInfo.setGoogleEmail(acct.getEmail());
-            Intent intent_main = new Intent(this, MainActivity.class);
-            startActivity(intent_main);
+            GoogleAcctHolder acctHolder = GoogleAcctHolder.getInstance();
+            acctHolder.setGoogleAcct(acct);
+
+            Intent mainActivityIntent = new Intent(this, MainActivity.class);
+            startActivity(mainActivityIntent);
             finish();
-            //mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
-            updateUI(true);
+            //updateUI(true);
         } else {
             // Signed out, show unauthenticated UI.
-            updateUI(false);
+            //updateUI(false);
         }
     }
     // [END handleSignInResult]
@@ -201,18 +201,22 @@ public class LoginActivity extends FragmentActivity implements
 
     private void updateUI(boolean signedIn) {
         if (signedIn) {
-            findViewById(R.id.google_sign_in_button).setVisibility(View.GONE);
-            //findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
+            findViewById(R.id.sign_in_button).setVisibility(View.GONE);
+            findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
         } else {
-            //mStatusTextView.setText(R.string.signed_out);
+            mStatusTextView.setText(R.string.signed_out);
 
-            findViewById(R.id.google_sign_in_button).setVisibility(View.VISIBLE);
-            //findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
+            findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
+            findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
         }
     }
 
     @Override
     public void onClick(View v) {
-        signIn();
+        switch (v.getId()) {
+            case R.id.sign_in_button:
+                signIn();
+                break;
+        }
     }
 }

@@ -19,14 +19,14 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TextView tv1 = (TextView)findViewById(R.id.text_name);
-        tv1.setText(acctInfo.getGoogleEmail());
-    }
+        //TextView tv1 = (TextView)findViewById(R.id.text_name);
+        TextView tv2 = (TextView)findViewById(R.id.text_googleId);
+        TextView tv3 = (TextView)findViewById(R.id.text_googleIdToken);
+        TextView tv4 = (TextView)findViewById(R.id.text_googleServerAuthCode);
+        tv2.setText(acctInfo.getId());
+        tv3.setText(acctInfo.getIdToken());
+        tv4.setText(acctInfo.getServerAuthCode());
 
-    public void openLoginActivity(View view) {
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-        finish();
     }
 
     @Override
