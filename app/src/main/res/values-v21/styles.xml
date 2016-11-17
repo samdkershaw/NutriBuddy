@@ -1,11 +1,10 @@
 <resources>
-    <style name="AppTheme" parent="android:Theme.Material">
+    <style name="AppTheme" parent="Theme.AppCompat">
         <item name="android:colorPrimary">#00BCD4</item>
         <item name="android:colorPrimaryDark">#0097A7</item>
     </style>
-    <style name="LoginActivity" parent="Theme.AppCompat.Light">
-        <item name="android:colorPrimary">#00BCD4</item>
-        <item name="android:colorPrimaryDark">#0097A7</item>
+    <style name="LoginActivity" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:background">#0097A7</item>
         <item name="android:colorAccent">#FFFFFF</item>
     </style>
 </resources>

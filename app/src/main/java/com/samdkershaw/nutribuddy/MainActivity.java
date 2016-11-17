@@ -2,31 +2,60 @@ package com.samdkershaw.nutribuddy;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.Scopes;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.fitness.Fitness;
 
-public class MainActivity extends Activity {
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
-    GoogleAcctHolder acctInfo = GoogleAcctHolder.getInstance();
+public class MainActivity extends AppCompatActivity {
+    private final String CLIENT_ID = "65097338712-7evu3o82f8si2195turum6u6jhltt8dr.apps.googleusercontent.com";
+    private final String AUTH_PENDING = "auth_state_pending";
+
+    public static GoogleApiClient mGoogleApiClient = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //TextView tv1 = (TextView)findViewById(R.id.text_name);
-        TextView tv2 = (TextView)findViewById(R.id.text_googleId);
-        TextView tv3 = (TextView)findViewById(R.id.text_googleIdToken);
-        TextView tv4 = (TextView)findViewById(R.id.text_googleServerAuthCode);
-        tv2.setText(acctInfo.getId());
-        tv3.setText(acctInfo.getIdToken());
-        tv4.setText(acctInfo.getServerAuthCode());
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00BCD4")));
+        GoogleAcctHolder acctInfo = GoogleAcctHolder.getInstance();
 
+
+
+        //new AsyncTask_BitmapLoader().execute();
+    }
+
+    public boolean isInternetConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        if (cm.getActiveNetworkInfo() != null) {
+            return cm.getActiveNetworkInfo().isConnected();
+        }
+        return false;
     }
 
     @Override

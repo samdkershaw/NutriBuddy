@@ -2,11 +2,11 @@ package com.samdkershaw.nutribuddy;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -19,7 +19,9 @@ import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 
-import java.util.concurrent.TimeUnit;
+import com.google.android.gms.fitness.Fitness;
+
+//import java.util.concurrent.TimeUnit;
 
 /**
  * Activity to demonstrate basic retrieval of the Google user's ID, email address, and basic
@@ -33,7 +35,6 @@ public class LoginActivity extends AppCompatActivity implements
     private static final int RC_SIGN_IN = 9001;
 
     private GoogleApiClient mGoogleApiClient;
-    private TextView mStatusTextView;
     private ProgressDialog mProgressDialog;
 
     @Override
@@ -41,10 +42,9 @@ public class LoginActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        getSupportActionBar().hide();
+        //getSupportActionBar().hide();
 
         // Views
-        mStatusTextView = (TextView) findViewById(R.id.status);
 
         Log.d(TAG, "Reached this point...");
         // Button listeners
@@ -55,12 +55,15 @@ public class LoginActivity extends AppCompatActivity implements
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
+                .requestId()
                 .build();
         // [END configure_signin]
 
         // [START build_client]
         // Build a GoogleApiClient with access to the Google Sign-In API and the
         // options specified by gso.
+        // ATTENTION: This "addApi(AppIndex.API)"was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
@@ -76,8 +79,8 @@ public class LoginActivity extends AppCompatActivity implements
         // Scopes.PLUS_LOGIN scope to the GoogleSignInOptions to see the
         // difference.
         SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_button);
-        signInButton.setSize(SignInButton.SIZE_STANDARD);
-        signInButton.setScopes(gso.getScopeArray());
+        signInButton.setSize(SignInButton.SIZE_WIDE);
+        //signInButton.setScopes(gso.getScopeArray());
         // [END customize_button]
     }
 
@@ -100,7 +103,6 @@ public class LoginActivity extends AppCompatActivity implements
             opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
                 @Override
                 public void onResult(GoogleSignInResult googleSignInResult) {
-                    try { TimeUnit.MILLISECONDS.sleep(1000); } catch (InterruptedException e) { e.printStackTrace(); }
                     hideProgressDialog();
                     handleSignInResult(googleSignInResult);
                 }
@@ -130,12 +132,14 @@ public class LoginActivity extends AppCompatActivity implements
             GoogleAcctHolder acctHolder = GoogleAcctHolder.getInstance();
             acctHolder.setGoogleAcct(acct);
 
+
             Intent mainActivityIntent = new Intent(this, MainActivity.class);
             startActivity(mainActivityIntent);
             finish();
             //updateUI(true);
         } else {
             // Signed out, show unauthenticated UI.
+            Log.e(TAG, "Tragic");
             //updateUI(false);
         }
     }
@@ -149,7 +153,7 @@ public class LoginActivity extends AppCompatActivity implements
     // [END signIn]
 
     // [START signOut]
-    private void signOut() {
+    /*private void signOut() {
         Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
                 new ResultCallback<Status>() {
                     @Override
@@ -159,11 +163,11 @@ public class LoginActivity extends AppCompatActivity implements
                         // [END_EXCLUDE]
                     }
                 });
-    }
+    }*/
     // [END signOut]
 
     // [START revokeAccess]
-    private void revokeAccess() {
+    /*private void revokeAccess() {
         Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient).setResultCallback(
                 new ResultCallback<Status>() {
                     @Override
@@ -173,7 +177,7 @@ public class LoginActivity extends AppCompatActivity implements
                         // [END_EXCLUDE]
                     }
                 });
-    }
+    }*/
     // [END revokeAccess]
 
     @Override
@@ -186,7 +190,7 @@ public class LoginActivity extends AppCompatActivity implements
     private void showProgressDialog() {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setMessage(getString(R.string.loading));
+            mProgressDialog.setMessage(getString(R.string.google_api_key));
             mProgressDialog.setIndeterminate(true);
         }
 
@@ -199,7 +203,7 @@ public class LoginActivity extends AppCompatActivity implements
         }
     }
 
-    private void updateUI(boolean signedIn) {
+    /*private void updateUI(boolean signedIn) {
         if (signedIn) {
             findViewById(R.id.sign_in_button).setVisibility(View.GONE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
@@ -209,7 +213,7 @@ public class LoginActivity extends AppCompatActivity implements
             findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
         }
-    }
+    }*/
 
     @Override
     public void onClick(View v) {
@@ -218,5 +222,10 @@ public class LoginActivity extends AppCompatActivity implements
                 signIn();
                 break;
         }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 }
