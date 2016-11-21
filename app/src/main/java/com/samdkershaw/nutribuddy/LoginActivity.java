@@ -1,9 +1,12 @@
 package com.samdkershaw.nutribuddy;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -27,15 +30,15 @@ import com.google.android.gms.fitness.Fitness;
  * Activity to demonstrate basic retrieval of the Google user's ID, email address, and basic
  * profile.
  */
-public class LoginActivity extends AppCompatActivity implements
-        GoogleApiClient.OnConnectionFailedListener,
+public class LoginActivity extends Activity implements
         View.OnClickListener {
 
-    private static final String TAG = "SignInActivity";
+    private static final String TAG = "LoginActivity";
     private static final int RC_SIGN_IN = 9001;
 
-    private GoogleApiClient mGoogleApiClient;
+    //private GoogleApiClient mGoogleApiClient;
     private ProgressDialog mProgressDialog;
+    private Dialog mErrorDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,149 +51,14 @@ public class LoginActivity extends AppCompatActivity implements
 
         Log.d(TAG, "Reached this point...");
         // Button listeners
-        findViewById(R.id.sign_in_button).setOnClickListener(this);
-
-        // [START configure_signin]
-        // Configure sign-in to request the user's ID, email address, and basic
-        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .requestId()
-                .build();
-        // [END configure_signin]
-
-        // [START build_client]
-        // Build a GoogleApiClient with access to the Google Sign-In API and the
-        // options specified by gso.
-        // ATTENTION: This "addApi(AppIndex.API)"was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-        // [END build_client]
-
-        // [START customize_button]
-        // Customize sign-in button. The sign-in button can be displayed in
-        // multiple sizes and color schemes. It can also be contextually
-        // rendered based on the requested scopes. For example. a red button may
-        // be displayed when Google+ scopes are requested, but a white button
-        // may be displayed when only basic profile is requested. Try adding the
-        // Scopes.PLUS_LOGIN scope to the GoogleSignInOptions to see the
-        // difference.
-        SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_button);
-        signInButton.setSize(SignInButton.SIZE_WIDE);
-        //signInButton.setScopes(gso.getScopeArray());
-        // [END customize_button]
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
-        if (opr.isDone()) {
-            // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
-            // and the GoogleSignInResult will be available instantly.
-            Log.d(TAG, "Got cached sign-in");
-            GoogleSignInResult result = opr.get();
-            handleSignInResult(result);
-        } else {
-            // If the user has not previously signed in on this device or the sign-in has expired,
-            // this asynchronous branch will attempt to sign in the user silently.  Cross-device
-            // single sign-on will occur in this branch.
-            showProgressDialog();
-            opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
-                @Override
-                public void onResult(GoogleSignInResult googleSignInResult) {
-                    hideProgressDialog();
-                    handleSignInResult(googleSignInResult);
-                }
-            });
-        }
-    }
-
-    // [START onActivityResult]
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleSignInResult(result);
-        }
-    }
-    // [END onActivityResult]
-
-    // [START handleSignInResult]
-    private void handleSignInResult(GoogleSignInResult result) {
-        Log.d(TAG, "handleSignInResult:" + result.isSuccess());
-        if (result.isSuccess()) {
-            // Signed in successfully, show authenticated UI.
-            GoogleSignInAccount acct = result.getSignInAccount();
-            GoogleAcctHolder acctHolder = GoogleAcctHolder.getInstance();
-            acctHolder.setGoogleAcct(acct);
-
-
-            Intent mainActivityIntent = new Intent(this, MainActivity.class);
-            startActivity(mainActivityIntent);
-            finish();
-            //updateUI(true);
-        } else {
-            // Signed out, show unauthenticated UI.
-            Log.e(TAG, "Tragic");
-            //updateUI(false);
-        }
-    }
-    // [END handleSignInResult]
-
-    // [START signIn]
-    private void signIn() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-    // [END signIn]
-
-    // [START signOut]
-    /*private void signOut() {
-        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        // [START_EXCLUDE]
-                        updateUI(false);
-                        // [END_EXCLUDE]
-                    }
-                });
-    }*/
-    // [END signOut]
-
-    // [START revokeAccess]
-    /*private void revokeAccess() {
-        Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        // [START_EXCLUDE]
-                        updateUI(false);
-                        // [END_EXCLUDE]
-                    }
-                });
-    }*/
-    // [END revokeAccess]
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
-        // be available.
-        Log.d(TAG, "onConnectionFailed:" + connectionResult);
+        findViewById(R.id.button_get_started).setOnClickListener(this);
     }
 
     private void showProgressDialog() {
         if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setMessage(getString(R.string.google_api_key));
+            mProgressDialog = new ProgressDialog(this, R.style.DialogBoxThemeBlah);
+            mProgressDialog.setTitle(R.string.attempting_sign_in);
+            mProgressDialog.setMessage(getString(R.string.attempting_sign_in_desc));
             mProgressDialog.setIndeterminate(true);
         }
 
@@ -203,23 +71,26 @@ public class LoginActivity extends AppCompatActivity implements
         }
     }
 
-    /*private void updateUI(boolean signedIn) {
-        if (signedIn) {
-            findViewById(R.id.sign_in_button).setVisibility(View.GONE);
-            findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
-        } else {
-            mStatusTextView.setText(R.string.signed_out);
+    private void showErrorDialog() {
+       if (mErrorDialog == null) {
+           mErrorDialog = new Dialog(this, R.style.DialogBoxThemeBlah);
+           mErrorDialog.setTitle(R.string.error_dialog_title);
+           mErrorDialog.setCancelable(true);
+           mErrorDialog.show();
+       }
+    }
 
-            findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
-            findViewById(R.id.sign_out_and_disconnect).setVisibility(View.GONE);
+    private void hideErrorDialog() {
+        if (mErrorDialog != null && mErrorDialog.isShowing()) {
+            mErrorDialog.hide();
         }
-    }*/
+    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.sign_in_button:
-                signIn();
+            case R.id.button_get_started:
+                showProgressDialog();
                 break;
         }
     }

@@ -1,12 +1,20 @@
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
-        <item name="android:colorPrimary">#00BCD4</item>
-        <item name="android:colorPrimaryDark">#0097A7</item>
+    <style name="Theme_AppTheme" parent="@android:style/Theme.Material.Light">
+        <item name="android:colorPrimary">@color/purple_deep_500</item>
+        <item name="android:colorPrimaryDark">@color/purple_deep_700</item>
+        <item name="android:colorAccent">@color/orange_400</item>
     </style>
-    <style name="LoginActivity" parent="AppTheme">
-        <item name="android:background">?android:attr/colorPrimaryDark</item>
-        <item name="android:colorAccent">#FFFFFF</item>
+    <style name="Theme_LoginActivity" parent="@android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:colorPrimary">@color/green_500</item>
+        <item name="android:colorPrimaryDark">@color/green_700</item>
+        <item name="android:windowBackground">@color/green_500</item>
+        <item name="android:colorAccent">@color/red_400</item>
+    </style>
+    <style name="DialogBoxThemeBlah" parent="@android:style/Theme.Material.Dialog.Alert">
+        <item name="android:windowBackground">@color/grey_200</item>
+        <item name="android:textColor">@color/grey_900</item>
+        <item name="android:colorAccent">@color/orange_deep_300</item>
     </style>
 
 </resources>

@@ -30,7 +30,8 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
+    private final String API_KEY = Integer.toString(R.string.google_api_key);
     private final String CLIENT_ID = "65097338712-7evu3o82f8si2195turum6u6jhltt8dr.apps.googleusercontent.com";
     private final String AUTH_PENDING = "auth_state_pending";
 
@@ -41,11 +42,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00BCD4")));
         GoogleAcctHolder acctInfo = GoogleAcctHolder.getInstance();
-
-
 
         //new AsyncTask_BitmapLoader().execute();
     }
