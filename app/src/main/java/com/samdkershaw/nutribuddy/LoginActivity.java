@@ -2,6 +2,8 @@ package com.samdkershaw.nutribuddy;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -39,19 +41,24 @@ public class LoginActivity extends Activity implements
     //private GoogleApiClient mGoogleApiClient;
     private ProgressDialog mProgressDialog;
     private Dialog mErrorDialog;
+    private FragmentManager mFragmentManager;
+    private FragmentTransaction mFragmentTransaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //getSupportActionBar().hide();
-
-        // Views
+        if (findViewById(R.id.fragment_container) != null && savedInstanceState == null) {
+            WelcomeFragment welcomeFragment = new WelcomeFragment();
+            mFragmentManager = getFragmentManager();
+            mFragmentTransaction = mFragmentManager.beginTransaction();
+            mFragmentTransaction.add(R.id.fragment_container, welcomeFragment)
+                    .commit();
+        }
 
         Log.d(TAG, "Reached this point...");
         // Button listeners
-        findViewById(R.id.button_get_started).setOnClickListener(this);
     }
 
     private void showProgressDialog() {
