@@ -1,103 +1,78 @@
 package com.samdkershaw.nutribuddy;
 
 import android.app.Activity;
-import android.app.Dialog;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.OptionalPendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-
-import com.google.android.gms.fitness.Fitness;
-
-//import java.util.concurrent.TimeUnit;
-
-/**
- * Activity to demonstrate basic retrieval of the Google user's ID, email address, and basic
- * profile.
+/*This activity hosts the welcome screen as well as the WebView
+     which is then used to request scopes from Google for the
+     Fitness API.
  */
 public class LoginActivity extends Activity implements
         View.OnClickListener {
 
-    private static final String TAG = "LoginActivity";
-    private static final int RC_SIGN_IN = 9001;
-
     //private GoogleApiClient mGoogleApiClient;
-    private ProgressDialog mProgressDialog;
-    private Dialog mErrorDialog;
-    private FragmentManager mFragmentManager;
-    private FragmentTransaction mFragmentTransaction;
+    private Toast mToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        if (findViewById(R.id.fragment_container) != null && savedInstanceState == null) {
+        if ((findViewById(R.id.fragment_container) != null && savedInstanceState == null)
+                || GoogleAcctHolder.getInstance().getAuthToken() == null) {
             WelcomeFragment welcomeFragment = new WelcomeFragment();
-            mFragmentManager = getFragmentManager();
-            mFragmentTransaction = mFragmentManager.beginTransaction();
-            mFragmentTransaction.add(R.id.fragment_container, welcomeFragment)
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.add(R.id.fragment_container, welcomeFragment, "WelcomeFragment")
                     .commit();
         }
-
-        Log.d(TAG, "Reached this point...");
-        // Button listeners
     }
 
-    private void showProgressDialog() {
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(this, R.style.DialogBoxThemeBlah);
-            mProgressDialog.setTitle(R.string.attempting_sign_in);
-            mProgressDialog.setMessage(getString(R.string.attempting_sign_in_desc));
-            mProgressDialog.setIndeterminate(true);
+    private void showErrorToast(String errorMsg) {
+        mToast = Toast.makeText(getApplicationContext(),
+                "Whoops... Error: " + errorMsg,
+                Toast.LENGTH_SHORT);
+        mToast.show();
+    }
+
+    private void swapFragments() {
+        Fragment cFragment = getFragmentManager().findFragmentById(R.id.fragment_container);
+        FragmentManager fragManager = getFragmentManager();
+        FragmentTransaction fragTransaction = fragManager.beginTransaction();
+        if (cFragment instanceof WelcomeFragment) {
+            fragTransaction.replace(R.id.fragment_container, new AuthBrowserFragment());
+            fragTransaction.addToBackStack(null);
+            fragTransaction.commitAllowingStateLoss();
         }
-
-        mProgressDialog.show();
-    }
-
-    private void hideProgressDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.hide();
+        else if (cFragment instanceof AuthBrowserFragment) {
+            fragTransaction.replace(R.id.fragment_container, new WelcomeFragment());
+            fragTransaction.commitAllowingStateLoss();
         }
     }
 
-    private void showErrorDialog() {
-       if (mErrorDialog == null) {
-           mErrorDialog = new Dialog(this, R.style.DialogBoxThemeBlah);
-           mErrorDialog.setTitle(R.string.error_dialog_title);
-           mErrorDialog.setCancelable(true);
-           mErrorDialog.show();
-       }
+    public void loginDenied(String errorMsg) {
+        swapFragments();
+        showErrorToast(errorMsg);
     }
 
-    private void hideErrorDialog() {
-        if (mErrorDialog != null && mErrorDialog.isShowing()) {
-            mErrorDialog.hide();
-        }
+    //Called when auth token is received in GoogleFitnessFragment class
+    public void completeLoginProcess() {
+        Intent mainActivityIntent = new Intent(this, MainActivity.class);
+        startActivity(mainActivityIntent);
+        finish();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_get_started:
-                showProgressDialog();
+                swapFragments();
                 break;
         }
     }

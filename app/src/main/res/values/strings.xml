@@ -1,11 +1,13 @@
 <resources>
     <string name="app_name">NutriBuddy</string>
 
+    <string name="google_client_id">65097338712-7evu3o82f8si2195turum6u6jhltt8dr.apps.googleusercontent.com</string>
+
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="attempting_sign_in">Logging in</string>
-    <string name="attempting_sign_in_desc">Authenticating with Google Services...</string>
+    <string name="attempting_sign_in_desc">Authenticating with Google Services</string>
     <string name="title_text">NutriBuddy</string>
     <string name="sign_out">Sign out</string>
     <string name="signed_out">You\'ve been signed out</string>
@@ -13,6 +15,8 @@
     <string name="signed_in_fmt">Signed in!</string>
     <string name="nutribuddy_tagline">Welcome to NutriBuddy.</string>
     <string name="nutribuddy_description">NutriBuddy is a new application that allows you to track your phone usage</string>
+    <string name="webview_loading_page_title">Loading page</string>
+    <string name="webview_loading_page_message">We\'re attempting to load the authorisation page</string>
 
     <string name="error_dialog_title">Whoops..</string>
 

@@ -1,9 +1,9 @@
 <resources>
 
-    <style name="Theme_AppTheme" parent="@android:style/Theme.Material.Light">
-        <item name="android:colorPrimary">@color/purple_deep_500</item>
-        <item name="android:colorPrimaryDark">@color/purple_deep_700</item>
-        <item name="android:colorAccent">@color/orange_400</item>
+    <style name="Theme_AppTheme" parent="@android:style/Theme.Material">
+        <item name="android:colorPrimary">@color/green_700</item>
+        <item name="android:colorPrimaryDark">@color/green_900</item>
+        <item name="android:colorAccent">@color/red_400</item>
     </style>
     <style name="Theme_LoginActivity" parent="@android:style/Theme.Material.Light.NoActionBar">
         <item name="android:colorPrimary">@color/green_700</item>
@@ -14,7 +14,7 @@
     <style name="DialogBoxThemeBlah" parent="@android:style/Theme.Material.Dialog.Alert">
         <item name="android:windowBackground">@color/grey_200</item>
         <item name="android:textColor">@color/grey_900</item>
-        <item name="android:colorAccent">@color/orange_deep_300</item>
+        <item name="android:colorAccent">@color/green_A700</item>
     </style>
 
 </resources>
