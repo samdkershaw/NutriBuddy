@@ -1,5 +1,6 @@
 package com.samdkershaw.nutribuddy;
 
+import android.app.Dialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
@@ -12,6 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class AuthBrowserFragment extends Fragment {
 
@@ -60,6 +64,24 @@ public class AuthBrowserFragment extends Fragment {
             e.printStackTrace();
         }
         return "http://www.google.com";
+    }
+
+    public String buildUrlForAuth() {
+        GoogleDetailsStore googleDetailsStore = GoogleDetailsStore.getInstance();
+        Uri newUri = new Uri.Builder()
+                .scheme("https")
+                .path("www.googleapis.com/oauth2/v4/token")
+                .appendQueryParameter("code", googleDetailsStore.getAuthToken())
+                .appendQueryParameter("client_id", getString(R.string.google_client_id))
+                .appendQueryParameter("redirect_uri", "postmessage")
+                .appendQueryParameter("grant_type", "authorization_code")
+                .build();
+        try {
+            return newUri.toString();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
@@ -121,15 +143,17 @@ public class AuthBrowserFragment extends Fragment {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             UrlQuerySanitizer sanitizer = new UrlQuerySanitizer(url);
-            if (url.contains("error")) {
+
+            if (url.contains("error=")) {
                 mainBrowser.stopLoading();
-                ((LoginActivity)getActivity()).loginDenied(sanitizer.getValue("error"));
+                ((MainActivity)getActivity()).loginDenied(sanitizer.getValue("error"));
             }
-            if (url.contains("127.0.0.1/?")) {
+            if (url.contains("code=")) {
                 view.setVisibility(View.INVISIBLE);
-                GoogleAcctHolder acctHolder = GoogleAcctHolder.getInstance();
+                GoogleDetailsStore acctHolder = GoogleDetailsStore.getInstance();
                 acctHolder.setAuthToken(sanitizer.getValue("code"));
-                ((LoginActivity)getActivity()).completeLoginProcess();
+                mainBrowser.stopLoading();
+                ((MainActivity)getActivity()).completeLoginProcess();
             }
         }
 

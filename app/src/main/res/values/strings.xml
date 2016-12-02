@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">NutriBuddy</string>
 
-    <string name="google_client_id">65097338712-7evu3o82f8si2195turum6u6jhltt8dr.apps.googleusercontent.com</string>
+    <string name="google_client_id">65097338712-a69lc4uoanrth87430sqvnicc90sjpdb.apps.googleusercontent.com</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -23,4 +23,6 @@
     <string name="get_started_button">Get Started</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="restrictions_pending_block_user">Restrictions pending</string>
 </resources>

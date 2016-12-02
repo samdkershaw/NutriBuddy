@@ -1,6 +1,82 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_container"
+    android:id="@+id/main_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-</FrameLayout>
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="4"
+    tools:context=".MainActivity"
+    android:baselineAligned="false">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:padding="20dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/nutribuddy_icon"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="30dp"
+            android:contentDescription="@string/app_name"
+            android:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/nutribuddy_welcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fadeScrollbars="true"
+            android:gravity="center"
+            android:maxLines="5"
+            android:scrollbars="vertical"
+            android:textColor="@android:color/white"
+            android:text="@string/nutribuddy_tagline"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/nutribuddy_more_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fadeScrollbars="true"
+            android:gravity="center"
+            android:padding="10dp"
+            android:textColor="@color/blue_grey_50"
+            android:text="@string/nutribuddy_description"
+            android:textSize="20sp"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:padding="20dp">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/progress_authorization"
+            android:indeterminate="true"
+            android:visibility="invisible"
+            android:elevation="2dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/button_get_started"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:text="@string/get_started_button"
+            android:layout_weight="1"
+            style="@android:style/Widget.Material.Button"
+            android:elevation="0dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
+</LinearLayout>
