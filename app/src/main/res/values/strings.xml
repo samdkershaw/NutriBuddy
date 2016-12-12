@@ -16,7 +16,7 @@
     <string name="nutribuddy_tagline">Welcome to NutriBuddy.</string>
     <string name="nutribuddy_description">NutriBuddy is a new application that allows you to track your phone usage</string>
     <string name="webview_loading_page_title">Loading page</string>
-    <string name="webview_loading_page_message">We\'re attempting to load the authorisation page</string>
+    <string name="webview_loading_page_message">The Google authorisation page is being loaded</string>
 
     <string name="error_dialog_title">Whoops..</string>
 
@@ -25,4 +25,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="restrictions_pending_block_user">Restrictions pending</string>
+
+    <string name="login_hint_title">Login Hint</string>
+    <string name="login_hint_description">This key will allow you to send a
+        login hint to the identity provider such as email or username</string>
 </resources>
